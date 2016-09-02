@@ -51,11 +51,11 @@ public class MovieViewHolder extends RecyclerView.ViewHolder {
     @OnClick(R.id.iv_movie)
     void onClick() {
         if (mOnItemClickListener != null && mMovie != null) {
-            mOnItemClickListener.onItemClick(mMovie);
+            mOnItemClickListener.onItemClick(mMoviePoster, mMovie);
         }
     }
 
     public interface OnItemClickListener {
-        void onItemClick(@NonNull Movie item);
+        void onItemClick(@NonNull View view, @NonNull Movie item);
     }
 }

@@ -1,5 +1,7 @@
 package nanodegree.nevis.com.popularmovies.model;
 
+import android.os.Parcel;
+import android.os.Parcelable;
 import android.support.annotation.NonNull;
 
 import com.google.gson.annotations.SerializedName;
@@ -8,7 +10,7 @@ import com.google.gson.annotations.SerializedName;
  * @author Nikita Simonov
  */
 
-public class Movie {
+public class Movie implements Parcelable {
 
     @SerializedName("id")
     private int mId;
@@ -29,6 +31,15 @@ public class Movie {
     private double mVoteAverage;
 
     public Movie() {
+    }
+
+    public Movie(Parcel parcel) {
+        mId = parcel.readInt();
+        mPosterPath = parcel.readString();
+        mOverview = parcel.readString();
+        mTitle = parcel.readString();
+        mReleasedDate = parcel.readString();
+        mVoteAverage = parcel.readDouble();
     }
 
     public int getId() {
@@ -58,4 +69,32 @@ public class Movie {
     public double getVoteAverage() {
         return mVoteAverage;
     }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel parcel, int i) {
+        parcel.writeInt(mId);
+        parcel.writeString(mPosterPath);
+        parcel.writeString(mOverview);
+        parcel.writeString(mTitle);
+        parcel.writeString(mReleasedDate);
+        parcel.writeDouble(mVoteAverage);
+    }
+
+    public static final Parcelable.Creator<Movie> CREATOR = new Parcelable.Creator<Movie>() {
+
+        @Override
+        public Movie createFromParcel(Parcel parcel) {
+            return new Movie(parcel);
+        }
+
+        @Override
+        public Movie[] newArray(int i) {
+            return new Movie[i];
+        }
+    };
 }

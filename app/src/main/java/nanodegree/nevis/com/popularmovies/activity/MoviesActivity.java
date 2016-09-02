@@ -5,6 +5,8 @@ import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.Toolbar;
+import android.view.View;
 
 import java.util.List;
 
@@ -35,12 +37,12 @@ public class MoviesActivity extends AppCompatActivity implements MoviesView, Mov
         setContentView(R.layout.ac_movies);
         ButterKnife.bind(this);
 
-        mPresenter = new MoviesPresenter();
-        mPresenter.init(this, RxLoader.get(this));
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
 
+        initPresenter();
         initAdapter();
-        mRecyclerView.setLayoutManager(new GridLayoutManager(getApplicationContext(), COLUMN_COUNT));
-        mRecyclerView.setAdapter(mAdapter);
+        initRecyclerView();
 
         mPresenter.loadPopularMovies();
     }
@@ -51,15 +53,23 @@ public class MoviesActivity extends AppCompatActivity implements MoviesView, Mov
     }
 
     @Override
-    public void onItemClick(@NonNull Movie item) {
-        // TODO: 01/09/16
+    public void onItemClick(@NonNull View view, @NonNull Movie item) {
+        MovieDetailsActivity.navigate(this, view, item);
+    }
+
+    private void initPresenter() {
+        mPresenter = new MoviesPresenter();
+        mPresenter.init(this, RxLoader.get(this));
+    }
+
+    private void initRecyclerView() {
+        mRecyclerView.setLayoutManager(new GridLayoutManager(getApplicationContext(), COLUMN_COUNT));
+        mRecyclerView.setAdapter(mAdapter);
     }
 
     private void initAdapter() {
         int imageWidth = getResources().getDisplayMetrics().widthPixels / COLUMN_COUNT;
-
         mAdapter = new MoviesAdapter(this, imageWidth, (int) (imageWidth * ASPECT_RATIO));
         mAdapter.onAttachedToRecyclerView(mRecyclerView);
-
     }
 }

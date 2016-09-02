@@ -15,6 +15,9 @@ import nanodegree.nevis.com.popularmovies.model.Movie;
 public final class ImageUtil {
 
     public static final String WIDTH_185 = "w185";
+    public static final String WIDTH_342 = "w342";
+    public static final String WIDTH_500 = "w500";
+    public static final String WIDTH_780 = "w780";
 
     private ImageUtil() {
         // do nothing
