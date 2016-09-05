@@ -75,7 +75,11 @@ public class MoviesPresenter {
     }
 
     private void handleResponse(@NonNull List<Movie> movies) {
-        mMoviesView.showMovies(movies);
+        if (movies.isEmpty()) {
+            mMoviesView.showEmptyView();
+        } else {
+            mMoviesView.showMovies(movies);
+        }
     }
 
 }

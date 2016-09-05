@@ -33,6 +33,9 @@ public class MoviesActivity extends AppCompatActivity implements MoviesView, Mov
     @BindView(R.id.rv_movies)
     RecyclerView mRecyclerView;
 
+    @BindView(R.id.tv_empty)
+    View mEmptyView;
+
     private LoadingDialog mLoadingDialog;
     private MoviesPresenter mPresenter;
     private MoviesAdapter mAdapter;
@@ -80,6 +83,12 @@ public class MoviesActivity extends AppCompatActivity implements MoviesView, Mov
     @Override
     public void showMovies(@NonNull List<Movie> movies) {
         mAdapter.setData(movies);
+        mEmptyView.setVisibility(View.GONE);
+    }
+
+    @Override
+    public void showEmptyView() {
+        mEmptyView.setVisibility(View.VISIBLE);
     }
 
     @Override

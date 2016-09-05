@@ -16,4 +16,6 @@ public interface MoviesView extends LoadingView, ErrorView {
     void bindTitle(@StringRes int titleId);
 
     void showMovies(@NonNull List<Movie> movies);
+
+    void showEmptyView();
 }
