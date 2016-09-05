@@ -10,6 +10,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Toast;
 
 import java.util.List;
 
@@ -22,6 +23,7 @@ import nanodegree.nevis.com.popularmovies.presenter.MoviesPresenter;
 import nanodegree.nevis.com.popularmovies.rx.RxLoader;
 import nanodegree.nevis.com.popularmovies.view.MoviesView;
 import nanodegree.nevis.com.popularmovies.viewholder.MovieViewHolder;
+import nanodegree.nevis.com.popularmovies.widget.LoadingDialog;
 
 public class MoviesActivity extends AppCompatActivity implements MoviesView, MovieViewHolder.OnItemClickListener {
 
@@ -31,6 +33,7 @@ public class MoviesActivity extends AppCompatActivity implements MoviesView, Mov
     @BindView(R.id.rv_movies)
     RecyclerView mRecyclerView;
 
+    private LoadingDialog mLoadingDialog;
     private MoviesPresenter mPresenter;
     private MoviesAdapter mAdapter;
 
@@ -42,6 +45,7 @@ public class MoviesActivity extends AppCompatActivity implements MoviesView, Mov
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+        mLoadingDialog = LoadingDialog.create(R.string.loading_text);
 
         initPresenter();
         initAdapter();
@@ -68,7 +72,6 @@ public class MoviesActivity extends AppCompatActivity implements MoviesView, Mov
         return super.onOptionsItemSelected(item);
     }
 
-
     @Override
     public void bindTitle(@StringRes int titleId) {
         setTitle(titleId);
@@ -82,6 +85,32 @@ public class MoviesActivity extends AppCompatActivity implements MoviesView, Mov
     @Override
     public void onItemClick(@NonNull View view, @NonNull Movie item) {
         MovieDetailsActivity.navigate(this, view, item);
+    }
+
+    @Override
+    public void showLoadingIndicator() {
+        mLoadingDialog.show(getFragmentManager());
+    }
+
+    @Override
+    public void hideLoadingIndicator() {
+        mLoadingDialog.cancel();
+    }
+
+    @Override
+    public void showNetworkError() {
+        showErrorMessage(getString(R.string.error_network));
+    }
+
+    @Override
+    public void showUnexpectedError() {
+        showErrorMessage(getString(R.string.error_unexpected));
+    }
+
+    @Override
+    public void showErrorMessage(@NonNull String message) {
+        Toast.makeText(this, message, Toast.LENGTH_SHORT)
+                .show();
     }
 
     private void initPresenter() {

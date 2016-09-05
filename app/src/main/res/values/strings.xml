@@ -9,4 +9,10 @@
     <string name="most_popular_movies_title">Most Popular Movies</string>
     <string name="top_rated_movies_title">Top Rated Movies</string>
 
+    <string name="loading_text">Loading…</string>
+    <string name="loading_title">Please, wait</string>
+
+    <string name="error_network">Network error</string>
+    <string name="error_unexpected">Unexpected error</string>
+
 </resources>

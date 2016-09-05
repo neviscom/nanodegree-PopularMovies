@@ -14,6 +14,4 @@ public interface ErrorView {
 
     void showErrorMessage(@NonNull String message);
 
-    void hideErrorMessage();
-
 }

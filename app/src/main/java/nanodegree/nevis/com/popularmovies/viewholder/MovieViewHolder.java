@@ -12,7 +12,7 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import nanodegree.nevis.com.popularmovies.R;
 import nanodegree.nevis.com.popularmovies.model.Movie;
-import utils.ImageUtil;
+import nanodegree.nevis.com.popularmovies.utils.ImageUtil;
 
 /**
  * @author Nikita Simonov

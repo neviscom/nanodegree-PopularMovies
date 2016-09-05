@@ -1,4 +1,4 @@
-package utils;
+package nanodegree.nevis.com.popularmovies.utils;
 
 import android.support.annotation.NonNull;
 import android.widget.ImageView;

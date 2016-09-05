@@ -11,7 +11,7 @@ import nanodegree.nevis.com.popularmovies.model.Movie;
  * @author Nikita Simonov
  */
 
-public interface MoviesView {
+public interface MoviesView extends LoadingView, ErrorView {
 
     void bindTitle(@StringRes int titleId);
 

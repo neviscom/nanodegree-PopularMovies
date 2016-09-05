@@ -24,8 +24,8 @@ import butterknife.ButterKnife;
 import nanodegree.nevis.com.popularmovies.R;
 import nanodegree.nevis.com.popularmovies.model.Movie;
 import nanodegree.nevis.com.popularmovies.presenter.MovieDetailsPresenter;
+import nanodegree.nevis.com.popularmovies.utils.ImageUtil;
 import nanodegree.nevis.com.popularmovies.view.MovieDetailsView;
-import utils.ImageUtil;
 
 /**
  * @author Nikita Simonov
