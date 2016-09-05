@@ -22,16 +22,21 @@ public class MovieRepository {
 
     public Observable<List<Movie>> getPopular() {
         return mService.getPopular()
-                .flatMap(new Func1<Movies, Observable<List<Movie>>>() {
-                    @Override
-                    public Observable<List<Movie>> call(Movies movies) {
-                        return Observable.just(movies.getMovies());
-                    }
-                });
+                .flatMap(moviesToList());
     }
 
-    public Observable<Movies> getTopRated() {
-        return mService.getTopRated();
+    public Observable<List<Movie>> getTopRated() {
+        return mService.getTopRated()
+                .flatMap(moviesToList());
+    }
+
+    private Func1<Movies, Observable<List<Movie>>> moviesToList() {
+        return new Func1<Movies, Observable<List<Movie>>>() {
+            @Override
+            public Observable<List<Movie>> call(Movies movies) {
+                return Observable.just(movies.getMovies());
+            }
+        };
     }
 
 }

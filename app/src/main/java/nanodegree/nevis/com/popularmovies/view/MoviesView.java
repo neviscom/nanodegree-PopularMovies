@@ -1,5 +1,8 @@
 package nanodegree.nevis.com.popularmovies.view;
 
+import android.support.annotation.NonNull;
+import android.support.annotation.StringRes;
+
 import java.util.List;
 
 import nanodegree.nevis.com.popularmovies.model.Movie;
@@ -10,5 +13,7 @@ import nanodegree.nevis.com.popularmovies.model.Movie;
 
 public interface MoviesView {
 
-    void showMovies(List<Movie> movies);
+    void bindTitle(@StringRes int titleId);
+
+    void showMovies(@NonNull List<Movie> movies);
 }

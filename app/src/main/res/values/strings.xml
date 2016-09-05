@@ -4,5 +4,9 @@
 
     <string name="movie_title">%1$s \u2014 %2$s</string>
     <string name="rating">Rating: \u2014 %1$s/%2$s</string>
+    <string name="most_popular_movies">Most popular</string>
+    <string name="top_rated_movies">Top rated</string>
+    <string name="most_popular_movies_title">Most Popular Movies</string>
+    <string name="top_rated_movies_title">Top Rated Movies</string>
 
 </resources>
