@@ -1,6 +1,7 @@
 package nanodegree.nevis.com.popularmovies.fragment;
 
 import android.app.Fragment;
+import android.content.res.Configuration;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -37,7 +38,6 @@ import nanodegree.nevis.com.popularmovies.widget.LoadingDialog;
 
 public class MoviesFragment extends Fragment implements MoviesView, MovieViewHolder.OnItemClickListener {
 
-    private static final int COLUMN_COUNT = 2;
     private static final double ASPECT_RATIO = 278d / 185d;
 
     @BindView(R.id.rv_movies)
@@ -109,13 +109,20 @@ public class MoviesFragment extends Fragment implements MoviesView, MovieViewHol
     }
 
     @Override
+    public void showMovieDetails(@NonNull Movie movie) {
+        if (isDetailfFragmentVisible()) {
+            navigateToMovieDetails(null, movie);
+        }
+    }
+
+    @Override
     public void showEmptyView() {
         mEmptyView.setVisibility(View.VISIBLE);
     }
 
     @Override
     public void onItemClick(@NonNull View view, @NonNull Movie item) {
-        MovieDetailsActivity.navigate(getActivity(), view, item);
+        navigateToMovieDetails(view, item);
     }
 
     @Override
@@ -150,7 +157,9 @@ public class MoviesFragment extends Fragment implements MoviesView, MovieViewHol
     }
 
     private void initRecyclerView() {
-        mRecyclerView.setLayoutManager(new GridLayoutManager(getActivity().getApplicationContext(), COLUMN_COUNT));
+        int moviesColumnsCount = getResources().getInteger(R.integer.movies_columns_count);
+        mRecyclerView.setLayoutManager(new GridLayoutManager(getActivity().getApplicationContext(),
+                moviesColumnsCount));
         mRecyclerView.setAdapter(mAdapter);
     }
 
@@ -161,5 +170,25 @@ public class MoviesFragment extends Fragment implements MoviesView, MovieViewHol
                 / windowColumnsCount;
         mAdapter = new MoviesAdapter(this, imageWidth, (int) (imageWidth * ASPECT_RATIO));
         mAdapter.onAttachedToRecyclerView(mRecyclerView);
+    }
+
+    private void navigateToMovieDetails(@Nullable View view, @NonNull Movie movie) {
+        if (isDetailfFragmentVisible()) {
+            showMovieDetailsFragment(movie);
+        } else {
+            MovieDetailsActivity.navigate(getActivity(), view, movie);
+        }
+    }
+    
+    private void showMovieDetailsFragment(@NonNull Movie movie) {
+        getActivity().getFragmentManager().beginTransaction()
+                .replace(R.id.details_container, MovieDetailsFragment.create(movie))
+                .commit();
+    }
+
+    private boolean isDetailfFragmentVisible() {
+        boolean isTablet = getResources().getBoolean(R.bool.md_is_tablet);
+        boolean isLandscape = getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE;
+        return isTablet && isLandscape;
     }
 }

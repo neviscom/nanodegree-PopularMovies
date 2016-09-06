@@ -28,14 +28,16 @@ public class MovieDetailsActivity extends AppCompatActivity {
     public static final String EXTRA_MOVIE = "movie";
     private static final String IMAGE = "image";
 
-    public static void navigate(@NonNull Activity activity, @NonNull View transitionImage,
+    public static void navigate(@NonNull Activity activity, @Nullable View transitionImage,
                                 @NonNull Movie movie) {
         Intent intent = new Intent(activity, MovieDetailsActivity.class);
         intent.putExtra(EXTRA_MOVIE, movie);
 
-        ActivityOptionsCompat options = ActivityOptionsCompat.makeSceneTransitionAnimation(activity,
-                transitionImage, IMAGE);
-        ActivityCompat.startActivity(activity, intent, options.toBundle());
+        Bundle bundleOptions = transitionImage != null
+                ? ActivityOptionsCompat.makeSceneTransitionAnimation(activity, transitionImage, IMAGE)
+                        .toBundle()
+                : null;
+        ActivityCompat.startActivity(activity, intent, bundleOptions);
     }
 
     @Override

@@ -79,6 +79,9 @@ public class MoviesPresenter {
             mMoviesView.showEmptyView();
         } else {
             mMoviesView.showMovies(movies);
+            if (!movies.isEmpty()) {
+                mMoviesView.showMovieDetails(movies.get(0));
+            }
         }
     }
 
