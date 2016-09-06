@@ -10,8 +10,6 @@ import nanodegree.nevis.com.popularmovies.model.Movie;
 
 public interface MovieDetailsView {
 
-    void prepareForAnimation();
-
     void bindToolbarTitle(@NonNull String title);
 
     void bindImage(@NonNull Movie movie);

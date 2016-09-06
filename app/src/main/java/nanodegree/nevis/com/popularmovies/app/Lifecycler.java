@@ -2,10 +2,9 @@ package nanodegree.nevis.com.popularmovies.app;
 
 import android.app.Activity;
 import android.app.Application;
+import android.app.FragmentManager;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.support.v4.app.FragmentManager;
-import android.support.v7.app.AppCompatActivity;
 
 import nanodegree.nevis.com.popularmovies.rx.RxLoader;
 
@@ -21,7 +20,7 @@ public class Lifecycler implements Application.ActivityLifecycleCallbacks {
 
     @Override
     public void onActivityCreated(Activity activity, Bundle bundle) {
-        final FragmentManager fm = ((AppCompatActivity) activity).getSupportFragmentManager();
+        final FragmentManager fm = activity.getFragmentManager();
         if (fm.findFragmentByTag(RxLoader.class.getName()) == null) {
             fm.beginTransaction()
                     .add(new RxLoader(), RxLoader.class.getName())

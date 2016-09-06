@@ -1,10 +1,10 @@
 package nanodegree.nevis.com.popularmovies.rx;
 
+import android.app.Fragment;
+import android.app.FragmentManager;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
 import android.util.LongSparseArray;
 
@@ -42,11 +42,11 @@ public class RxLoader extends Fragment {
 
     @NonNull
     public static RxLoader get(@NonNull AppCompatActivity activity) {
-        return get(activity.getSupportFragmentManager());
+        return get(activity.getFragmentManager());
     }
 
     @NonNull
-    public static RxLoader get(@NonNull android.support.v4.app.Fragment fragment) {
+    public static RxLoader get(@NonNull Fragment fragment) {
         return get(fragment.getFragmentManager());
     }
 

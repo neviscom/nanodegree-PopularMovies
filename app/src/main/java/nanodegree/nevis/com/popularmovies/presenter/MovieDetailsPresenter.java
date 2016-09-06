@@ -26,7 +26,6 @@ public class MovieDetailsPresenter {
         mView = view;
         mMovie = movie;
         showContent();
-        mView.prepareForAnimation();
     }
     
     public void onHomeButtonPressed() {
