@@ -11,8 +11,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import nanodegree.nevis.com.popularmovies.R;
+import nanodegree.nevis.com.popularmovies.adapter.viewholder.MovieViewHolder;
 import nanodegree.nevis.com.popularmovies.model.Movie;
-import nanodegree.nevis.com.popularmovies.viewholder.MovieViewHolder;
 
 /**
  * @author Nikita Simonov

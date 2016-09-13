@@ -1,4 +1,4 @@
-package nanodegree.nevis.com.popularmovies.viewholder;
+package nanodegree.nevis.com.popularmovies.adapter.viewholder;
 
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;

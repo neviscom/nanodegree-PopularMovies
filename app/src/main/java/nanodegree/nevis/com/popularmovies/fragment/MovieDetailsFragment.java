@@ -5,20 +5,31 @@ import android.app.Fragment;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
+
+import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import nanodegree.nevis.com.popularmovies.R;
 import nanodegree.nevis.com.popularmovies.activity.MovieDetailsActivity;
+import nanodegree.nevis.com.popularmovies.adapter.ReviewsAdapter;
+import nanodegree.nevis.com.popularmovies.adapter.TrailersAdapter;
 import nanodegree.nevis.com.popularmovies.model.Movie;
+import nanodegree.nevis.com.popularmovies.model.Review;
+import nanodegree.nevis.com.popularmovies.model.Video;
 import nanodegree.nevis.com.popularmovies.presenter.MovieDetailsPresenter;
+import nanodegree.nevis.com.popularmovies.rx.RxLoader;
 import nanodegree.nevis.com.popularmovies.utils.ImageUtil;
 import nanodegree.nevis.com.popularmovies.view.MovieDetailsView;
 
@@ -43,7 +54,25 @@ public class MovieDetailsFragment extends Fragment implements MovieDetailsView {
     @BindView(R.id.iv_image)
     ImageView mImageView;
 
+    @BindView(R.id.progress_trailers)
+    ProgressBar mTrailersProgress;
+
+    @BindView(R.id.progress_reviews)
+    ProgressBar mReviewsProgress;
+
+    @BindView(R.id.rv_trailers)
+    RecyclerView mTrailersRecycler;
+
+    @BindView(R.id.rv_reviews)
+    RecyclerView mReviewsRecycler;
+
     private MovieDetailsPresenter mPresenter;
+
+    @NonNull
+    private TrailersAdapter mTrailersAdapter = new TrailersAdapter();
+
+    @NonNull
+    private ReviewsAdapter mReviewsAdapter = new ReviewsAdapter();
 
     public static MovieDetailsFragment create(@NonNull Movie movie) {
         MovieDetailsFragment fragment = new MovieDetailsFragment();
@@ -68,6 +97,8 @@ public class MovieDetailsFragment extends Fragment implements MovieDetailsView {
 
         Movie movie = getArguments().getParcelable(MovieDetailsActivity.EXTRA_MOVIE);
         initPresenter(movie);
+        initTrailersRecycler();
+        initReviewsRecycler();
 
         return view;
     }
@@ -127,8 +158,68 @@ public class MovieDetailsFragment extends Fragment implements MovieDetailsView {
         getActivity().onBackPressed();
     }
 
+    @Override
+    public void showTrailersLoadingIndicator() {
+        mTrailersProgress.setVisibility(View.VISIBLE);
+    }
+
+    @Override
+    public void hideTrailersLoadingIndicator() {
+        mTrailersProgress.setVisibility(View.GONE);
+    }
+
+    @Override
+    public void showReviewsLoadingIndicator() {
+        mReviewsProgress.setVisibility(View.VISIBLE);
+    }
+
+    @Override
+    public void hideReviewsLoadingIndicator() {
+        mReviewsProgress.setVisibility(View.GONE);
+    }
+
+    @Override
+    public void showTrailers(@NonNull List<Video> trailers) {
+        mTrailersAdapter.setTrailers(trailers);
+    }
+
+    @Override
+    public void showReviews(@NonNull List<Review> reviews) {
+        mReviewsAdapter.setReviews(reviews);
+    }
+
+    @Override
+    public void showNetworkError() {
+        showErrorMessage(getString(R.string.error_network));
+    }
+
+    @Override
+    public void showUnexpectedError() {
+        showErrorMessage(getString(R.string.error_unexpected));
+    }
+
+    @Override
+    public void showErrorMessage(@NonNull String message) {
+        Toast.makeText(getActivity(), message, Toast.LENGTH_SHORT)
+                .show();
+    }
+
     private void initPresenter(Movie movie) {
         mPresenter = new MovieDetailsPresenter();
-        mPresenter.init(this, movie);
+        mPresenter.init(this, movie, RxLoader.get(this));
+    }
+
+    private void initTrailersRecycler() {
+        LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
+        mTrailersRecycler.setNestedScrollingEnabled(false);
+        mTrailersRecycler.setLayoutManager(layoutManager);
+        mTrailersRecycler.setAdapter(mTrailersAdapter);
+    }
+
+    private void initReviewsRecycler() {
+        LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
+        mReviewsRecycler.setNestedScrollingEnabled(false);
+        mReviewsRecycler.setLayoutManager(layoutManager);
+        mReviewsRecycler.setAdapter(mReviewsAdapter);
     }
 }

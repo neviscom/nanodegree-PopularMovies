@@ -16,4 +16,6 @@
     <string name="error_network">Network error</string>
     <string name="error_unexpected">Unexpected error</string>
 
+    <string name="trailers_title">Trailers</string>
+    <string name="reviews_title">Reviews</string>
 </resources>

@@ -25,11 +25,11 @@ import butterknife.ButterKnife;
 import nanodegree.nevis.com.popularmovies.R;
 import nanodegree.nevis.com.popularmovies.activity.MovieDetailsActivity;
 import nanodegree.nevis.com.popularmovies.adapter.MoviesAdapter;
+import nanodegree.nevis.com.popularmovies.adapter.viewholder.MovieViewHolder;
 import nanodegree.nevis.com.popularmovies.model.Movie;
 import nanodegree.nevis.com.popularmovies.presenter.MoviesPresenter;
 import nanodegree.nevis.com.popularmovies.rx.RxLoader;
 import nanodegree.nevis.com.popularmovies.view.MoviesView;
-import nanodegree.nevis.com.popularmovies.viewholder.MovieViewHolder;
 import nanodegree.nevis.com.popularmovies.widget.LoadingDialog;
 
 /**
@@ -110,7 +110,7 @@ public class MoviesFragment extends Fragment implements MoviesView, MovieViewHol
 
     @Override
     public void showMovieDetails(@NonNull Movie movie) {
-        if (isDetailfFragmentVisible()) {
+        if (isDetailsFragmentVisible()) {
             navigateToMovieDetails(null, movie);
         }
     }
@@ -173,7 +173,7 @@ public class MoviesFragment extends Fragment implements MoviesView, MovieViewHol
     }
 
     private void navigateToMovieDetails(@Nullable View view, @NonNull Movie movie) {
-        if (isDetailfFragmentVisible()) {
+        if (isDetailsFragmentVisible()) {
             showMovieDetailsFragment(movie);
         } else {
             MovieDetailsActivity.navigate(getActivity(), view, movie);
@@ -186,7 +186,7 @@ public class MoviesFragment extends Fragment implements MoviesView, MovieViewHol
                 .commit();
     }
 
-    private boolean isDetailfFragmentVisible() {
+    private boolean isDetailsFragmentVisible() {
         boolean isTablet = getResources().getBoolean(R.bool.md_is_tablet);
         boolean isLandscape = getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE;
         return isTablet && isLandscape;
