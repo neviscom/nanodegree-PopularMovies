@@ -25,19 +25,21 @@ import nanodegree.nevis.com.popularmovies.R;
 import nanodegree.nevis.com.popularmovies.activity.MovieDetailsActivity;
 import nanodegree.nevis.com.popularmovies.adapter.ReviewsAdapter;
 import nanodegree.nevis.com.popularmovies.adapter.TrailersAdapter;
+import nanodegree.nevis.com.popularmovies.adapter.viewholder.TrailerViewHolder;
 import nanodegree.nevis.com.popularmovies.model.Movie;
 import nanodegree.nevis.com.popularmovies.model.Review;
 import nanodegree.nevis.com.popularmovies.model.Video;
 import nanodegree.nevis.com.popularmovies.presenter.MovieDetailsPresenter;
 import nanodegree.nevis.com.popularmovies.rx.RxLoader;
 import nanodegree.nevis.com.popularmovies.utils.ImageUtil;
+import nanodegree.nevis.com.popularmovies.utils.VideoUtils;
 import nanodegree.nevis.com.popularmovies.view.MovieDetailsView;
 
 /**
  * @author Nikita Simonov
  */
 
-public class MovieDetailsFragment extends Fragment implements MovieDetailsView {
+public class MovieDetailsFragment extends Fragment implements MovieDetailsView, TrailerViewHolder.OnClickListener {
 
     @BindView(R.id.tv_title)
     TextView mTitleTextView;
@@ -67,9 +69,7 @@ public class MovieDetailsFragment extends Fragment implements MovieDetailsView {
     RecyclerView mReviewsRecycler;
 
     private MovieDetailsPresenter mPresenter;
-
-    @NonNull
-    private TrailersAdapter mTrailersAdapter = new TrailersAdapter();
+    private TrailersAdapter mTrailersAdapter;
 
     @NonNull
     private ReviewsAdapter mReviewsAdapter = new ReviewsAdapter();
@@ -97,6 +97,7 @@ public class MovieDetailsFragment extends Fragment implements MovieDetailsView {
 
         Movie movie = getArguments().getParcelable(MovieDetailsActivity.EXTRA_MOVIE);
         initPresenter(movie);
+        mTrailersAdapter = new TrailersAdapter(this);
         initTrailersRecycler();
         initReviewsRecycler();
 
@@ -126,11 +127,7 @@ public class MovieDetailsFragment extends Fragment implements MovieDetailsView {
 
     @Override
     public void bindToolbarTitle(@NonNull String title) {
-/*        CollapsingToolbarLayout toolbarLayout = (CollapsingToolbarLayout) getActivity()
-                .findViewById(R.id.toolbar_layout);
-        toolbarLayout.setTitle(title);
-        toolbarLayout.setExpandedTitleColor(ContextCompat.getColor(getActivity(),
-                android.R.color.transparent));*/
+        // TODO: 13/09/16
     }
 
     @Override
@@ -202,6 +199,16 @@ public class MovieDetailsFragment extends Fragment implements MovieDetailsView {
     public void showErrorMessage(@NonNull String message) {
         Toast.makeText(getActivity(), message, Toast.LENGTH_SHORT)
                 .show();
+    }
+
+    @Override
+    public void onTrailerClick(@NonNull Video video) {
+        mPresenter.onTrailerClick(video);
+    }
+
+    @Override
+    public void browseVideo(@NonNull String videoUrl) {
+        VideoUtils.browseVideo(getActivity(), videoUrl);
     }
 
     private void initPresenter(Movie movie) {

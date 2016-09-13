@@ -38,4 +38,6 @@ public interface MovieDetailsView extends ErrorView {
 
     void showReviews(@NonNull List<Review> reviews);
 
+    void browseVideo(@NonNull String videoUrl);
+
 }

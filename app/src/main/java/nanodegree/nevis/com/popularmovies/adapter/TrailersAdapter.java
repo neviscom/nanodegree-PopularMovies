@@ -1,6 +1,7 @@
 package nanodegree.nevis.com.popularmovies.adapter;
 
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -23,6 +24,13 @@ public class TrailersAdapter extends RecyclerView.Adapter<TrailerViewHolder> {
     @NonNull
     private final List<Video> mTrailers = new ArrayList<>();
 
+    @Nullable
+    private TrailerViewHolder.OnClickListener mOnTrailerClickListener;
+
+    public TrailersAdapter(@Nullable TrailerViewHolder.OnClickListener onTrailerClickListener) {
+        mOnTrailerClickListener = onTrailerClickListener;
+    }
+
     public void setTrailers(@NonNull Collection<Video> trailers) {
         mTrailers.clear();
         mTrailers.addAll(trailers);
@@ -33,7 +41,7 @@ public class TrailersAdapter extends RecyclerView.Adapter<TrailerViewHolder> {
     public TrailerViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.li_trailer, parent, false);
-        return new TrailerViewHolder(view);
+        return new TrailerViewHolder(view, mOnTrailerClickListener);
     }
 
     @Override

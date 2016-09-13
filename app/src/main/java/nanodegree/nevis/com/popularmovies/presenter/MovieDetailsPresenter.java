@@ -11,6 +11,7 @@ import nanodegree.nevis.com.popularmovies.model.Video;
 import nanodegree.nevis.com.popularmovies.repository.RepositoryProvider;
 import nanodegree.nevis.com.popularmovies.rx.RxDecorator;
 import nanodegree.nevis.com.popularmovies.rx.RxLoader;
+import nanodegree.nevis.com.popularmovies.utils.VideoUtils;
 import nanodegree.nevis.com.popularmovies.view.MovieDetailsView;
 import rx.Observable;
 import rx.functions.Action0;
@@ -50,6 +51,10 @@ public class MovieDetailsPresenter {
 
     public void onHomeButtonPressed() {
         mView.closeScreen();
+    }
+    
+    public void onTrailerClick(@NonNull Video video) {
+        mView.browseVideo(VideoUtils.getYouTubeVideoUrl(video));
     }
 
     private void showContent() {
