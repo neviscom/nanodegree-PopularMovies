@@ -74,7 +74,7 @@ public class RxLoader extends Fragment {
     }
 
     @NonNull
-    public <T> Observable.Transformer<T, T> async() {
+    public static <T> Observable.Transformer<T, T> async() {
         return new Observable.Transformer<T, T>() {
             @Override
             public Observable<T> call(Observable<T> tObservable) {

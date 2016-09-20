@@ -30,6 +30,8 @@ public class Movie implements Parcelable {
     @SerializedName("vote_average")
     private double mVoteAverage;
 
+    private boolean mIsFavourite;
+
     public Movie() {
     }
 
@@ -40,6 +42,10 @@ public class Movie implements Parcelable {
         mTitle = parcel.readString();
         mReleasedDate = parcel.readString();
         mVoteAverage = parcel.readDouble();
+
+        boolean[] values = new boolean[1];
+        parcel.readBooleanArray(values);
+        mIsFavourite = values[0];
     }
 
     public int getId() {
@@ -70,6 +76,14 @@ public class Movie implements Parcelable {
         return mVoteAverage;
     }
 
+    public boolean isFavourite() {
+        return mIsFavourite;
+    }
+
+    public void setFavourite(boolean favourite) {
+        mIsFavourite = favourite;
+    }
+
     @Override
     public int describeContents() {
         return 0;
@@ -83,6 +97,23 @@ public class Movie implements Parcelable {
         parcel.writeString(mTitle);
         parcel.writeString(mReleasedDate);
         parcel.writeDouble(mVoteAverage);
+        parcel.writeBooleanArray(new boolean[]{mIsFavourite});
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Movie movie = (Movie) o;
+
+        return mId == movie.mId;
+
+    }
+
+    @Override
+    public int hashCode() {
+        return mId;
     }
 
     public static final Parcelable.Creator<Movie> CREATOR = new Parcelable.Creator<Movie>() {

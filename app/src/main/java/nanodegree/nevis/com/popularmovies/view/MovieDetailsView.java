@@ -40,4 +40,6 @@ public interface MovieDetailsView extends ErrorView {
 
     void browseVideo(@NonNull String videoUrl);
 
+    void showIsFavourite(boolean isFavourite);
+
 }

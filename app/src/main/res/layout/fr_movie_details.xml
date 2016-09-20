@@ -72,7 +72,7 @@
                     style="@style/TextHeader2"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_gravity="start"
+                    android:layout_gravity="start|center_vertical"
                     android:layout_margin="@dimen/text_margin"
                     android:textSize="@dimen/info_text_size"/>
 
@@ -80,7 +80,9 @@
                     android:id="@+id/iv_favourite"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_gravity="end"/>
+                    android:layout_gravity="end|center_vertical"
+                    android:padding="@dimen/margin_medium"
+                    tools:ignore="ContentDescription"/>
             </FrameLayout>
 
             <TextView

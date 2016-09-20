@@ -3,7 +3,8 @@ package nanodegree.nevis.com.popularmovies.app;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.support.annotation.NonNull;
-import android.text.TextUtils;
+
+import nanodegree.nevis.com.popularmovies.model.MoviesType;
 
 /**
  * @author Nikita Simonov
@@ -15,22 +16,18 @@ public final class Preferences {
 
     private static final String SORT_ORDER_KEY = "movieSortOrder";
 
-    private static final String POPULAR_MOVIE_ORDER = "popular";
-    private static final String TOP_RATED_MOVIE_ORDER = "topRated";
-
-    public static boolean isPopularOrder(@NonNull SharedPreferences prefs) {
+    public static MoviesType isPopularOrder(@NonNull SharedPreferences prefs) {
         if (!prefs.contains(SORT_ORDER_KEY)) {
-            prefs.edit().putString(SORT_ORDER_KEY, POPULAR_MOVIE_ORDER).apply();
-            return true;
+            prefs.edit().putString(SORT_ORDER_KEY, MoviesType.POPULAR.name()).apply();
+            return MoviesType.POPULAR;
         }
-        return TextUtils.equals(POPULAR_MOVIE_ORDER, prefs.getString(SORT_ORDER_KEY, ""));
+
+        return MoviesType.valueOf(MoviesType.class, prefs.getString(SORT_ORDER_KEY, MoviesType.POPULAR.name()));
     }
 
-    public static void setPopularMovieOrder(@NonNull SharedPreferences prefs, boolean isPopular) {
+    public static void setPopularMovieOrder(@NonNull SharedPreferences prefs, MoviesType moviesType) {
         prefs.edit()
-                .putString(SORT_ORDER_KEY, isPopular
-                        ? POPULAR_MOVIE_ORDER
-                        : TOP_RATED_MOVIE_ORDER)
+                .putString(SORT_ORDER_KEY, moviesType.name())
                 .apply();
     }
 

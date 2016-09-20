@@ -18,6 +18,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
+import java.util.Collections;
 import java.util.List;
 
 import butterknife.BindView;
@@ -27,6 +28,7 @@ import nanodegree.nevis.com.popularmovies.activity.MovieDetailsActivity;
 import nanodegree.nevis.com.popularmovies.adapter.MoviesAdapter;
 import nanodegree.nevis.com.popularmovies.adapter.viewholder.MovieViewHolder;
 import nanodegree.nevis.com.popularmovies.model.Movie;
+import nanodegree.nevis.com.popularmovies.model.MoviesType;
 import nanodegree.nevis.com.popularmovies.presenter.MoviesPresenter;
 import nanodegree.nevis.com.popularmovies.rx.RxLoader;
 import nanodegree.nevis.com.popularmovies.view.MoviesView;
@@ -55,8 +57,15 @@ public class MoviesFragment extends Fragment implements MoviesView, MovieViewHol
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setHasOptionsMenu(true);
-        initPresenter();
+        mPresenter = new MoviesPresenter(this, RxLoader.get(this));
+        mPresenter.dispatchCreate(savedInstanceState);
         mLoadingDialog = LoadingDialog.create(R.string.loading_text);
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        mPresenter.saveInstantState(outState);
     }
 
     @Nullable
@@ -76,8 +85,12 @@ public class MoviesFragment extends Fragment implements MoviesView, MovieViewHol
         super.onViewCreated(view, savedInstanceState);
         initAdapter();
         initRecyclerView();
+    }
 
-        mPresenter.loadMovies();
+    @Override
+    public void onStart() {
+        super.onStart();
+        mPresenter.dispatchStart();
     }
 
     @Override
@@ -88,10 +101,13 @@ public class MoviesFragment extends Fragment implements MoviesView, MovieViewHol
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         if (item.getItemId() == R.id.most_popular) {
-            mPresenter.onSortChanged(true);
+            mPresenter.onSortChanged(MoviesType.POPULAR);
             return true;
         } else if (item.getItemId() == R.id.top_rated) {
-            mPresenter.onSortChanged(false);
+            mPresenter.onSortChanged(MoviesType.TOP_RATED);
+            return true;
+        } else if (item.getItemId() == R.id.favourites) {
+            mPresenter.onSortChanged(MoviesType.FAVOURITE);
             return true;
         }
         return super.onOptionsItemSelected(item);
@@ -117,6 +133,7 @@ public class MoviesFragment extends Fragment implements MoviesView, MovieViewHol
 
     @Override
     public void showEmptyView() {
+        mAdapter.setData(Collections.<Movie>emptyList());
         mEmptyView.setVisibility(View.VISIBLE);
     }
 
@@ -149,11 +166,6 @@ public class MoviesFragment extends Fragment implements MoviesView, MovieViewHol
     public void showErrorMessage(@NonNull String message) {
         Toast.makeText(getActivity(), message, Toast.LENGTH_SHORT)
                 .show();
-    }
-
-    private void initPresenter() {
-        mPresenter = new MoviesPresenter();
-        mPresenter.init(this, RxLoader.get(this));
     }
 
     private void initRecyclerView() {

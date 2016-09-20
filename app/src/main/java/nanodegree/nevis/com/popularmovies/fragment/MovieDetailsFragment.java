@@ -5,6 +5,7 @@ import android.app.Fragment;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
@@ -21,6 +22,7 @@ import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 import nanodegree.nevis.com.popularmovies.R;
 import nanodegree.nevis.com.popularmovies.activity.MovieDetailsActivity;
 import nanodegree.nevis.com.popularmovies.adapter.ReviewsAdapter;
@@ -68,6 +70,9 @@ public class MovieDetailsFragment extends Fragment implements MovieDetailsView, 
     @BindView(R.id.rv_reviews)
     RecyclerView mReviewsRecycler;
 
+    @BindView(R.id.iv_favourite)
+    ImageView mFavourite;
+
     private MovieDetailsPresenter mPresenter;
     private TrailersAdapter mTrailersAdapter;
 
@@ -87,6 +92,19 @@ public class MovieDetailsFragment extends Fragment implements MovieDetailsView, 
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setHasOptionsMenu(true);
+
+        Movie movie = getArguments().getParcelable(MovieDetailsActivity.EXTRA_MOVIE);
+        if (movie == null) {
+            throw new IllegalStateException("Movie data isn't receive in Movie Details");
+        }
+        mPresenter = new MovieDetailsPresenter(this, movie, RxLoader.get(this));
+        mPresenter.dispatchCreate(savedInstanceState);
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        mPresenter.saveInstantState(outState);
     }
 
     @Nullable
@@ -95,13 +113,17 @@ public class MovieDetailsFragment extends Fragment implements MovieDetailsView, 
         View view = inflater.inflate(R.layout.fr_movie_details, container, false);
         ButterKnife.bind(this, view);
 
-        Movie movie = getArguments().getParcelable(MovieDetailsActivity.EXTRA_MOVIE);
-        initPresenter(movie);
         mTrailersAdapter = new TrailersAdapter(this);
         initTrailersRecycler();
         initReviewsRecycler();
 
         return view;
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        mPresenter.dispatchStart();
     }
 
     @Override
@@ -123,6 +145,12 @@ public class MovieDetailsFragment extends Fragment implements MovieDetailsView, 
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    @SuppressWarnings("unused")
+    @OnClick(R.id.iv_favourite)
+    void onFavouriteClick() {
+        mPresenter.onFavouriteClick();
     }
 
     @Override
@@ -211,9 +239,10 @@ public class MovieDetailsFragment extends Fragment implements MovieDetailsView, 
         VideoUtils.browseVideo(getActivity(), videoUrl);
     }
 
-    private void initPresenter(Movie movie) {
-        mPresenter = new MovieDetailsPresenter();
-        mPresenter.init(this, movie, RxLoader.get(this));
+    @Override
+    public void showIsFavourite(boolean isFavourite) {
+        mFavourite.setImageDrawable(ContextCompat.getDrawable(getActivity(),
+                isFavourite ? R.drawable.star_filled : R.drawable.star));
     }
 
     private void initTrailersRecycler() {
